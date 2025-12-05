@@ -121,10 +121,7 @@ class Game {
                     }
                 }
 
-                // Combo logic (reset if landed on same platform? No, combo is usually quick jumps)
-                // For now, just reset combo if we stop moving too much? Or maybe combo is height based.
-                // Let's make Combo based on rapid jumps.
-
+                // Combo logic
                 return; // Collided with one, stop checking
             }
         }
