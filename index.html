@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Tower Jump</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="game-container">
+        <canvas id="gameCanvas"></canvas>
+
+        <div id="ui-layer">
+            <div id="hud">
+                <div class="score-box">
+                    <span class="label">FLOOR</span>
+                    <span id="score">0</span>
+                </div>
+                <div class="combo-box">
+                    <span class="label">COMBO</span>
+                    <span id="combo">0</span>
+                </div>
+            </div>
+
+            <div id="start-screen" class="screen active">
+                <h1 class="title">NEON<br>TOWER</h1>
+                <p class="instructions">Arrows to Move • Space to Jump</p>
+                <button id="start-btn" class="btn">START CLIMB</button>
+            </div>
+
+            <div id="game-over-screen" class="screen">
+                <h1 class="title">GAME OVER</h1>
+                <div class="stats">
+                    <p>Floor: <span id="final-score">0</span></p>
+                    <p>Best: <span id="high-score">0</span></p>
+                </div>
+                <button id="restart-btn" class="btn">TRY AGAIN</button>
+            </div>
+        </div>
+    </div>
+    <!-- Scripts loaded in dependency order -->
+    <script src="js/utils.js"></script>
+    <script src="js/input.js"></script>
+    <script src="js/particles.js"></script>
+    <script src="js/platform.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/level.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
