@@ -32,4 +32,10 @@ class InputHandler {
     isDown(key) {
         return this.keys[key];
     }
+
+    setKey(key, status) {
+        if (this.keys.hasOwnProperty(key)) {
+            this.keys[key] = status;
+        }
+    }
 }

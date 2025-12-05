@@ -32,6 +32,33 @@ class Game {
             this.startGame();
         });
 
+        // Mobile Controls
+        const btnLeft = document.getElementById('btn-left');
+        const btnRight = document.getElementById('btn-right');
+        const btnJump = document.getElementById('btn-jump');
+
+        const bindTouch = (elem, code) => {
+            elem.addEventListener('touchstart', (e) => {
+                e.preventDefault(); // Prevent scrolling/selecting
+                this.input.setKey(code, true);
+            });
+            elem.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                this.input.setKey(code, false);
+            });
+            // Mouse events for testing on non-touch
+            elem.addEventListener('mousedown', (e) => {
+                this.input.setKey(code, true);
+            });
+            elem.addEventListener('mouseup', (e) => {
+                this.input.setKey(code, false);
+            });
+        };
+
+        bindTouch(btnLeft, 'ArrowLeft');
+        bindTouch(btnRight, 'ArrowRight');
+        bindTouch(btnJump, 'Space');
+
         this.lastTime = 0;
         this.loop = this.loop.bind(this);
         requestAnimationFrame(this.loop);
