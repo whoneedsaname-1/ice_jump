@@ -11,12 +11,12 @@ class Game {
         this.particles = new ParticleSystem();
 
         this.state = 'START'; // START, PLAYING, GAMEOVER
-        this.combo = 0;
+
         this.highScore = localStorage.getItem('neonTowerHighScore') || 0;
 
         // UI Elements
         this.uiScore = document.getElementById('score');
-        this.uiCombo = document.getElementById('combo');
+
         this.startScreen = document.getElementById('start-screen');
         this.gameOverScreen = document.getElementById('game-over-screen');
         this.finalScoreEl = document.getElementById('final-score');
@@ -69,7 +69,7 @@ class Game {
         this.level.reset();
         this.player = new Player(this.width / 2, this.height - 150);
         this.particles.reset();
-        this.combo = 0;
+
 
         this.startScreen.classList.remove('active');
         this.gameOverScreen.classList.remove('active');
@@ -105,7 +105,7 @@ class Game {
         this.checkCollisions();
 
         // Game Over Check
-        if (this.player.y > this.level.cameraY + this.height + 100) {
+        if (this.player.y > this.level.cameraY + this.height) {
             this.gameOver();
         }
 
@@ -148,7 +148,7 @@ class Game {
                     }
                 }
 
-                // Combo logic
+
                 return; // Collided with one, stop checking
             }
         }
@@ -156,7 +156,7 @@ class Game {
 
     updateUI() {
         this.uiScore.innerText = this.level.score;
-        this.uiCombo.innerText = this.combo;
+
     }
 
     draw() {

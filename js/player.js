@@ -9,10 +9,10 @@ class Player {
 
         // Physics constants
         this.friction = 0.8;
-        this.acceleration = 1.8;
+        this.acceleration = 1.2;
         this.gravity = 0.7;
         this.jumpForce = -17;
-        this.maxSpeed = 10;
+        this.maxSpeed = 8;
 
         this.onGround = false;
         this.color = '#ffffff';
