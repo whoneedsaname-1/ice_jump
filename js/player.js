@@ -17,6 +17,17 @@ class Player {
         this.onGround = false;
         this.color = '#ffffff';
         this.trail = []; // For visual effect
+
+        // Jump Improvements
+        this.maxJumps = 2;
+        this.jumpCount = 0;
+
+        this.coyoteTime = 6; // Frames
+        this.coyoteCounter = 0;
+
+        this.jumpBufferTime = 6; // Frames
+        this.jumpBufferCounter = 0;
+        this.wasSpaceDown = false; // To prevent machine-gun jumping
     }
 
     update(input, canvasWidth) {
@@ -49,10 +60,40 @@ class Player {
             this.x = -this.width;
         }
 
-        // Jumping
-        if (this.onGround && input.isDown('Space')) {
-            this.jump();
+        // Coyote Time Management
+        if (this.onGround) {
+            this.coyoteCounter = this.coyoteTime;
+            this.jumpCount = 0; // Reset jumps when on ground
+        } else {
+            this.coyoteCounter--;
         }
+
+        // Jump Buffer Management
+        const isSpaceDown = input.isDown('Space');
+        if (isSpaceDown && !this.wasSpaceDown) {
+            this.jumpBufferCounter = this.jumpBufferTime; // Register press
+        } else {
+            this.jumpBufferCounter--;
+        }
+
+        // Jump Logic
+        // 1. Ground Jump: Allow Buffer OR Held Key (Bunny Hop)
+        if (this.coyoteCounter > 0) {
+            if (this.jumpBufferCounter > 0 || isSpaceDown) {
+                this.jump();
+                this.jumpBufferCounter = 0;
+                this.coyoteCounter = 0;
+                this.jumpCount = 1;
+            }
+        }
+        // 2. Double Jump: Strict Buffer Only (Must be a fresh press)
+        else if (this.jumpBufferCounter > 0 && this.jumpCount < this.maxJumps) {
+            this.jump(0, true);
+            this.jumpBufferCounter = 0;
+            this.jumpCount++;
+        }
+
+        this.wasSpaceDown = isSpaceDown;
 
         // Trail effect
         if (Math.abs(this.vx) > 5 || Math.abs(this.vy) > 5) {
@@ -64,9 +105,19 @@ class Player {
         this.onGround = false; // Reset ground state, will be set by collision
     }
 
-    jump(bonus = 0) {
-        this.vy = this.jumpForce - Math.abs(this.vx * 0.2) - bonus; // Speed adds jump height
+    jump(bonus = 0, isDouble = false) {
+        if (isDouble) {
+            this.vy = this.jumpForce * 0.9; // Slightly weaker second jump
+            // Visual effect for double jump could go here
+        } else {
+            this.vy = this.jumpForce - Math.abs(this.vx * 0.2) - bonus; // Speed adds jump height
+        }
         this.onGround = false;
+    }
+
+    resetJumps() {
+        this.jumpCount = 0;
+        this.coyoteCounter = this.coyoteTime;
     }
 
     draw(ctx, cameraY) {

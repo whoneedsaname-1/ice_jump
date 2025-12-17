@@ -23,34 +23,46 @@
                     <span class="label">FLOOR</span>
                     <span id="score">0</span>
                 </div>
-
             </div>
 
+            <div id="tutorial-overlay" class="screen">
+                <div id="tutorial-text" class="tutorial-instructions"></div>
+            </div>
+
+        </div>
 
 
-            <div id="start-screen" class="screen active">
-                <h1 class="title">NEON<br>TOWER</h1>
-                <p class="instructions">Arrows to Move • Space to Jump</p>
+
+        <div id="start-screen" class="screen active">
+            <h1 class="title">NEON<br>TOWER</h1>
+            <div class="instructions-box">
+                <p>← → to Move</p>
+                <p>Space to Jump</p>
+                <p class="highlight">Double Press Space to Double Jump!</p>
+            </div>
+            <div class="button-group">
                 <button id="start-btn" class="btn">START CLIMB</button>
-            </div>
-
-            <div id="game-over-screen" class="screen">
-                <h1 class="title">GAME OVER</h1>
-                <div class="stats">
-                    <p>Floor: <span id="final-score">0</span></p>
-                    <p>Best: <span id="high-score">0</span></p>
-                </div>
-                <button id="restart-btn" class="btn">TRY AGAIN</button>
+                <button id="tutorial-btn" class="btn secondary">TUTORIAL</button>
             </div>
         </div>
 
-        <div id="mobile-controls">
-            <div class="move-controls">
-                <button id="btn-left" class="control-btn">←</button>
-                <button id="btn-right" class="control-btn">→</button>
+        <div id="game-over-screen" class="screen">
+            <h1 class="title">GAME OVER</h1>
+            <div class="stats">
+                <p>Floor: <span id="final-score">0</span></p>
+                <p>Best: <span id="high-score">0</span></p>
             </div>
-            <button id="btn-jump" class="control-btn">↟</button>
+            <button id="restart-btn" class="btn">TRY AGAIN</button>
         </div>
+    </div>
+
+    <div id="mobile-controls">
+        <div class="move-controls">
+            <button id="btn-left" class="control-btn">←</button>
+            <button id="btn-right" class="control-btn">→</button>
+        </div>
+        <button id="btn-jump" class="control-btn">↟</button>
+    </div>
     </div>
     <!-- Scripts loaded in dependency order -->
     <script src="js/utils.js"></script>
@@ -59,6 +71,7 @@
     <script src="js/platform.js"></script>
     <script src="js/player.js"></script>
     <script src="js/level.js"></script>
+    <script src="js/tutorial.js"></script>
     <script src="js/game.js"></script>
     <script src="js/main.js"></script>
 </body>

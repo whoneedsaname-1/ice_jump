@@ -32,6 +32,11 @@ class Game {
             this.startGame();
         });
 
+        document.getElementById('tutorial-btn').addEventListener('click', (e) => {
+            e.target.blur();
+            this.startTutorial();
+        });
+
         // Mobile Controls
         const btnLeft = document.getElementById('btn-left');
         const btnRight = document.getElementById('btn-right');
@@ -59,13 +64,49 @@ class Game {
         bindTouch(btnRight, 'ArrowRight');
         bindTouch(btnJump, 'Space');
 
+        this.tutorial = new TutorialManager(this);
+
         this.lastTime = 0;
         this.loop = this.loop.bind(this);
         requestAnimationFrame(this.loop);
     }
 
+    startTutorial() {
+        this.state = 'TUTORIAL';
+        this.level.resetTutorial();
+        this.player = new Player(this.width / 2, this.height - 150);
+        this.particles.reset();
+
+        this.startScreen.classList.remove('active');
+        this.gameOverScreen.classList.remove('active');
+
+        this.tutorial.start();
+        this.updateUI();
+    }
+
+    endTutorial() {
+        this.state = 'START';
+        this.tutorial.stop();
+
+        // Save score if needed (using same high score logic, or separate tutorial score?)
+        // User asked to "save score acquired in tutorial". 
+        // I'll assume they want it to count towards high score if it's high enough, 
+        // OR just save it as "last score".
+        // Let's reuse the high score logic from gameOver just to be safe it saves.
+        if (this.level.score > this.highScore) {
+            this.highScore = this.level.score;
+            localStorage.setItem('neonTowerHighScore', this.highScore);
+        }
+
+        // Return to start screen
+        this.startScreen.classList.add('active');
+        this.gameOverScreen.classList.remove('active');
+        this.updateUI();
+    }
+
     startGame() {
         this.state = 'PLAYING';
+        if (this.tutorial) this.tutorial.stop(); // Clear tutorial UI
         this.level.reset();
         this.player = new Player(this.width / 2, this.height - 150);
         this.particles.reset();
@@ -78,6 +119,11 @@ class Game {
     }
 
     gameOver() {
+        if (this.state === 'TUTORIAL') {
+            this.startTutorial(); // Instant restart
+            return;
+        }
+
         this.state = 'GAMEOVER';
         if (this.level.score > this.highScore) {
             this.highScore = this.level.score;
@@ -90,10 +136,17 @@ class Game {
     }
 
     update(dt) {
-        if (this.state !== 'PLAYING') return;
+        if (this.state !== 'PLAYING' && this.state !== 'TUTORIAL') return;
+
+        let updateInput = this.input;
+        if (this.state === 'TUTORIAL') {
+            this.tutorial.update(dt);
+            // Apply tutorial input restrictions
+            updateInput = this.tutorial.filterInput(this.input);
+        }
 
         // Player Update
-        this.player.update(this.input, this.width);
+        this.player.update(updateInput, this.width);
 
         // Level Update
         this.level.update(this.player.y, this.height);
@@ -131,6 +184,7 @@ class Game {
                 this.player.y = p.y - this.player.height;
                 this.player.vy = 0;
                 this.player.onGround = true;
+                this.player.resetJumps();
 
                 // Platform logic
                 if (p.type === PlatformType.ICE) {
